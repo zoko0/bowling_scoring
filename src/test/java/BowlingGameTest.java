@@ -28,4 +28,21 @@ public class BowlingGameTest {
         game.roll(5);
         assertEquals(5, game.calculateScore());
     }
+
+    @Test
+    public void bowlingGameScoreAfterTwoRolls() throws Exception {
+        game.roll(5);
+        game.roll(4);
+        assertEquals(9, game.calculateScore());
+    }
+
+    @Test
+    public void bowlingGameScoreAfterFiveRolls() throws Exception {
+        game.roll(5);
+        game.roll(4);
+        game.roll(4);
+        game.roll(4);
+        game.roll(4);
+        assertEquals(21, game.calculateScore());
+    }
 }
