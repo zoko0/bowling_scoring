@@ -1,5 +1,5 @@
 public class BowlingGame {
-    private static final int ROUNDS = 12; // 10 + ekstra rzut + puste miejce na policzenie dwoch strike'ow pod rzad
+    private static final int ROUNDS = 13; // 10 + 2x ekstra rzut + puste miejce na policzenie dwoch strike'ow pod rzad
     private static final int MAX_PINS = 10;
     private int[][] rolledInRound;
     private int currentRound= 0;
@@ -13,6 +13,8 @@ public class BowlingGame {
     public void roll(int pins) {
         if (pins > MAX_PINS || pins <0)
             throw new IllegalArgumentException("Illegal argument: Should be in range 0-10");
+        else if (!isFirstRollInRound && (rolledInRound[currentRound][0] + pins > 10))
+            throw new IllegalArgumentException("Illegal argument: Can't throw more than 10 in one round");
         else {
 
             rolledInRound[currentRound][mapRollInRoundToArray(isFirstRollInRound)] = pins;
@@ -27,8 +29,6 @@ public class BowlingGame {
                 currentRound++;
 
             isFirstRollInRound = !(isFirstRollInRound);
-
-
         }
     }
 
@@ -41,14 +41,17 @@ public class BowlingGame {
 
              finalScore += rolledInRound[i][0] + rolledInRound[i][1];
 
-             if (isSpare(i))
-                 finalScore += rolledInRound[i+1][0];
+             if (!isLastRound(i)) {
+                 if (isSpare(i))
+                     finalScore += rolledInRound[i + 1][0];
 
-             if (isStrike(i) && isTwoStrikesInTheRow(i))
-                 finalScore += rolledInRound[i+1][0] + rolledInRound[i+2][0];
+                 if (isStrike(i) && isTwoStrikesInTheRow(i))
+                     finalScore += rolledInRound[i + 1][0] + rolledInRound[i + 2][0];
 
-             if (isStrike(i) && !isTwoStrikesInTheRow(i))
-                 finalScore += rolledInRound[i+1][0] + rolledInRound[i+1][1];
+                 if (isStrike(i) && !isTwoStrikesInTheRow(i))
+                     finalScore += rolledInRound[i + 1][0] + rolledInRound[i + 1][1];
+             }
+
 
              System.out.println("Score in current round: " + finalScore);
         }
@@ -61,6 +64,10 @@ public class BowlingGame {
             return 0;
         else
             return 1;
+    }
+
+    private boolean isLastRound(int round){
+        return (round >= 9);
     }
 
     private boolean isSpare(int round){

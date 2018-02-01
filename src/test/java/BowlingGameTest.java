@@ -14,8 +14,13 @@ public class BowlingGameTest {
     }
 
     @Test(expected = Exception.class)
-    public void rollReturnsException(){
+    public void rollReturnsExceptionIfMoreThenTen(){
         game.roll(11);
+    }
+
+    @Test(expected = Exception.class)
+    public void rollReturnsExceptionIfLessThenTen(){
+        game.roll(-1);
     }
 
     @Test
@@ -59,7 +64,7 @@ public class BowlingGameTest {
     }
 
     @Test
-    public void bowlingGameScoreAfterThrewStrikesInTheRow(){
+    public void bowlingGameScoreAfterThreeStrikesInTheRow(){
         rollQueue = new int[]{10, 10, 10, 1, 1};
         rollMany(rollQueue);
         assertEquals(32 + 20 + 11 + 2, game.calculateScore());
@@ -69,10 +74,9 @@ public class BowlingGameTest {
     public void bowlingGameScoreAfterSpareInLastRound(){
         rollQueue = new int[]{1,2,3,4,1,2,3,4,9,0,1,2,3,4,1,2,3,4,9,1,1};
         int expected = 0;
-        for (int aRollQueue : rollQueue){
-            expected += aRollQueue;
+        for (int knockedPins : rollQueue){
+            expected += knockedPins;
         }
-        expected += 1;
 
         rollMany(rollQueue);
         assertEquals(expected, game.calculateScore());
@@ -83,10 +87,9 @@ public class BowlingGameTest {
     public void bowlingGameScoreAfterStrikeInLastRound(){
         rollQueue = new int[]{1,2,3,4,1,2,3,4,9,0,1,2,3,4,1,2,3,4,10,1};
         int expected = 0;
-        for (int aRollQueue : rollQueue){
-            expected += aRollQueue;
+        for (int knockedPins : rollQueue){
+            expected += knockedPins;
         }
-        expected += 1;
 
         rollMany(rollQueue);
         assertEquals(expected, game.calculateScore());
@@ -94,7 +97,7 @@ public class BowlingGameTest {
 
     @Test
     public void bowlingGamePerfectScore(){
-        rollQueue = new int[]{10,10,10,10,10,10,10,10,10,10,10};
+        rollQueue = new int[]{10,10,10,10,10,10,10,10,10,10,10,10};
 
         rollMany(rollQueue);
         assertEquals(300, game.calculateScore());
