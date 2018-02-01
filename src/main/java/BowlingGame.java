@@ -1,5 +1,5 @@
 public class BowlingGame {
-    private static final int rounds = 11; // 10 + ekstra rzut
+    private static final int rounds = 12; // 10 + ekstra rzut + puste miejce na policzenie dwoch strike'ow pod rzad
     private static final int maxPins = 10;
     private int[][] rolledInRound;
     private int currentRound= 0;

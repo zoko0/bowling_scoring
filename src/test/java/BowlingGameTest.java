@@ -92,6 +92,14 @@ public class BowlingGameTest {
         assertEquals(expected, game.calculateScore());
     }
 
+    @Test
+    public void bowlingGamePerfectScore() throws Exception {
+        rollQueue = new int[]{10,10,10,10,10,10,10,10,10,10,10};
+
+        theySeeMeRollinTheyHatin(rollQueue);
+        assertEquals(300, game.calculateScore());
+    }
+
     private void theySeeMeRollinTheyHatin(int[] rollQueue) throws Exception {
         for (int aRollQueue : rollQueue) {
             game.roll(aRollQueue);
