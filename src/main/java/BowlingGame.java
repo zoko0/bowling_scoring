@@ -4,7 +4,7 @@ public class BowlingGame {
     private int[][] rolledInRound;
     private int currentRound= 0;
     private boolean isFirstRollInRound = true;
-    //private boolean spareInRound = false;
+    private boolean isStriked = false;
 
     //konstruktor
     public BowlingGame(){
@@ -12,21 +12,23 @@ public class BowlingGame {
     }
 
     public void roll(int pins) throws Exception {
-        //System.out.println(pins);
-
         if (pins > maxPins)
             throw new Exception("Too large number of knocked pins");
         else {
             rolledInRound[currentRound][mapRollInRoundToArray(isFirstRollInRound)] = pins;
+
+            //jeśli strike to zapisz w drugim rzucie kolejki -1 i ustaw "drugi rzut"  rzucony
+            if (isFirstRollInRound && (pins == 10)){
+                rolledInRound[currentRound][1] = 0;
+                isFirstRollInRound = false;
+            }
+
+            if (!isFirstRollInRound)
+                currentRound++;
+
             isFirstRollInRound = !(isFirstRollInRound);
 
-            if (isFirstRollInRound){
-                //checkIfStrike
-                currentRound++;
-            } else{
-                //spareInRound = checkIfSpare();
-                //System.out.println(spareInRound);
-            }
+
         }
     }
 
@@ -41,6 +43,12 @@ public class BowlingGame {
 
              if (checkIfSpare(i))
                  finalScore += rolledInRound[i+1][0];
+
+             if (checkIfStrike(i) && checkIfTwoStrikesInRow(i))
+                 finalScore += rolledInRound[i+1][0] + rolledInRound[i+2][0];
+
+             if (checkIfStrike(i) && !checkIfTwoStrikesInRow(i))
+                 finalScore += rolledInRound[i+1][0] + rolledInRound[i+1][1];
         }
 
         return finalScore;
@@ -54,6 +62,15 @@ public class BowlingGame {
     }
 
     private boolean checkIfSpare(int round){
-        return (rolledInRound[round][0] + rolledInRound[round][1] == 10);
+        return ((rolledInRound[round][0] + rolledInRound[round][1] == 10) && rolledInRound[round][0] != 10);
     }
+
+    private boolean checkIfStrike(int round){
+        return (rolledInRound[round][0] == 10 && rolledInRound[round][1] == 0);
+    }
+
+    private boolean checkIfTwoStrikesInRow(int round){
+        return (checkIfStrike(round) && checkIfStrike(round+1));
+    }
+
 }
