@@ -4,7 +4,6 @@ public class BowlingGame {
     private int[][] rolledInRound;
     private int currentRound= 0;
     private boolean isFirstRollInRound = true;
-    private boolean isStriked = false;
 
     //konstruktor
     public BowlingGame(){
