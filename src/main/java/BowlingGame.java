@@ -2,19 +2,13 @@ public class BowlingGame {
     private static final int rounds = 10;
     private static final int maxPins = 10;
     private int[][] rolledInRound;
-    private int currentRound= -1;
+    private int currentRound= 0;
     private boolean isFirstRollInRound = true;
+    //private boolean spareInRound = false;
 
     //konstruktor
     public BowlingGame(){
         this.rolledInRound = new int[rounds][2];
-    }
-
-    private int mapRollInRoundToArray( boolean whichRollInRound){
-        if (whichRollInRound)
-            return 0;
-        else
-            return 1;
     }
 
     public void roll(int pins) throws Exception {
@@ -23,15 +17,16 @@ public class BowlingGame {
         if (pins > maxPins)
             throw new Exception("Too large number of knocked pins");
         else {
+            rolledInRound[currentRound][mapRollInRoundToArray(isFirstRollInRound)] = pins;
+            isFirstRollInRound = !(isFirstRollInRound);
+
             if (isFirstRollInRound){
                 //checkIfStrike
                 currentRound++;
             } else{
-                //checkIfSpare
+                //spareInRound = checkIfSpare();
+                //System.out.println(spareInRound);
             }
-            rolledInRound[currentRound][mapRollInRoundToArray(isFirstRollInRound)] = pins;
-            isFirstRollInRound = !(isFirstRollInRound);
-
         }
     }
 
@@ -44,9 +39,21 @@ public class BowlingGame {
 
              finalScore += rolledInRound[i][0] + rolledInRound[i][1];
 
+             if (checkIfSpare(i))
+                 finalScore += rolledInRound[i+1][0];
         }
 
         return finalScore;
     }
 
+    private int mapRollInRoundToArray( boolean whichRollInRound){
+        if (whichRollInRound)
+            return 0;
+        else
+            return 1;
+    }
+
+    private boolean checkIfSpare(int round){
+        return (rolledInRound[round][0] + rolledInRound[round][1] == 10);
+    }
 }

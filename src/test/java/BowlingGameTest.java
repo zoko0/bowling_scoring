@@ -44,6 +44,13 @@ public class BowlingGameTest {
         assertEquals(21, game.calculateScore());
     }
 
+    @Test
+    public void bowlingGameScoreAfterSpare() throws Exception {
+        rollQueue = new int[]{5, 5, 4, 4, 4};
+        theySeeMeRollinTheyHatin(rollQueue);
+        assertEquals(26, game.calculateScore());
+    }
+
     private void theySeeMeRollinTheyHatin(int[] rollQueue) throws Exception {
         for (int aRollQueue : rollQueue) {
             game.roll(aRollQueue);
