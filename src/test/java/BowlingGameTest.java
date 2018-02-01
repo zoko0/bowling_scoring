@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 public class BowlingGameTest {
 
     private BowlingGame game;
-    int[] rollQueue;
+    private int[] rollQueue;
 
     @Before
     public void setUp(){
@@ -37,75 +37,68 @@ public class BowlingGameTest {
 
     @Test
     public void bowlingGameScoreAfterTwoRolls(){
-        rollQueue = new int[]{5, 4};
-        rollMany(rollQueue);
+        game.roll(5);
+        game.roll(4);
+
         assertEquals(9, game.calculateScore());
     }
 
     @Test
-    public void bowlingGameScoreAfterFiveRolls(){
-        rollQueue = new int[]{5, 4, 4, 4, 4};
-        rollMany(rollQueue);
-        assertEquals(21, game.calculateScore());
-    }
-
-    @Test
     public void bowlingGameScoreAfterSpare(){
-        rollQueue = new int[]{5, 5, 4, 4, 4};
-        rollMany(rollQueue);
+        rollMany(2, 5);
+        rollMany(3, 4);
         assertEquals(26, game.calculateScore());
     }
 
     @Test
     public void bowlingGameScoreAfterStrike(){
-        rollQueue = new int[]{10, 1, 1};
-        rollMany(rollQueue);
+        game.roll(10);
+        rollMany(2, 1);
         assertEquals(14, game.calculateScore());
     }
 
     @Test
     public void bowlingGameScoreAfterThreeStrikesInTheRow(){
-        rollQueue = new int[]{10, 10, 10, 1, 1};
-        rollMany(rollQueue);
+        rollMany(3, 10);
+        rollMany(2, 1);
+
         assertEquals(32 + 20 + 11 + 2, game.calculateScore());
     }
 
     @Test
     public void bowlingGameScoreAfterSpareInLastRound(){
-        rollQueue = new int[]{1,2,3,4,1,2,3,4,9,0,1,2,3,4,1,2,3,4,9,1,1};
-        int expected = 0;
-        for (int knockedPins : rollQueue){
-            expected += knockedPins;
-        }
+        rollMany(18, 1);
+        game.roll(9);
+        game.roll(1);
+        game.roll(1);
 
-        rollMany(rollQueue);
-        assertEquals(expected, game.calculateScore());
 
+        assertEquals(18+9+1+1, game.calculateScore());
     }
 
     @Test
     public void bowlingGameScoreAfterStrikeInLastRound(){
-        rollQueue = new int[]{1,2,3,4,1,2,3,4,9,0,1,2,3,4,1,2,3,4,10,1};
-        int expected = 0;
-        for (int knockedPins : rollQueue){
-            expected += knockedPins;
-        }
+        rollMany(18, 1);
+        game.roll(10);
+        game.roll(1);
 
-        rollMany(rollQueue);
-        assertEquals(expected, game.calculateScore());
+        assertEquals(18+ 10 + 1, game.calculateScore());
     }
 
     @Test
     public void bowlingGamePerfectScore(){
-        rollQueue = new int[]{10,10,10,10,10,10,10,10,10,10,10,10};
-
-        rollMany(rollQueue);
+        rollMany(12, 10);
         assertEquals(300, game.calculateScore());
     }
 
-    private void rollMany(int[] rollQueue){
-        for (int knockedPins : rollQueue) {
-            game.roll(knockedPins);
+    @Test(expected = Exception.class)
+    public void bowlingGameOutOfBoundError(){
+        rollMany(13, 10);
+    }
+
+    private void rollMany(int howManyRolls,int pinsInEachThrow){
+        for (int i=0; i < howManyRolls; i++) {
+            game.roll(pinsInEachThrow);
         }
     }
 

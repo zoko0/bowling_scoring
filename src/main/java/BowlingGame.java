@@ -15,8 +15,9 @@ public class BowlingGame {
             throw new IllegalArgumentException("Illegal argument: Should be in range 0-10");
         else if (!isFirstRollInRound && (rolledInRound[currentRound][0] + pins > 10))
             throw new IllegalArgumentException("Illegal argument: Can't throw more than 10 in one round");
+        else if (currentRound >= 12)
+            throw new IllegalArgumentException("Illegal argument: More throws than possible");
         else {
-
             rolledInRound[currentRound][mapRollInRoundToArray(isFirstRollInRound)] = pins;
 
             //jeśli strike to zapisz w drugim rzucie kolejki -1 i ustaw "drugi rzut"  rzucony
