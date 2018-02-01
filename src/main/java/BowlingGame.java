@@ -1,18 +1,18 @@
 public class BowlingGame {
-    private static final int rounds = 12; // 10 + ekstra rzut + puste miejce na policzenie dwoch strike'ow pod rzad
-    private static final int maxPins = 10;
+    private static final int ROUNDS = 12; // 10 + ekstra rzut + puste miejce na policzenie dwoch strike'ow pod rzad
+    private static final int MAX_PINS = 10;
     private int[][] rolledInRound;
     private int currentRound= 0;
     private boolean isFirstRollInRound = true;
 
     //konstruktor
     public BowlingGame(){
-        this.rolledInRound = new int[rounds][3];
+        this.rolledInRound = new int[ROUNDS][2];
     }
 
-    public void roll(int pins) throws Exception {
-        if (pins > maxPins)
-            throw new Exception("Too large number of knocked pins");
+    public void roll(int pins) {
+        if (pins > MAX_PINS || pins <0)
+            throw new IllegalArgumentException("Illegal argument: Should be in range 0-10");
         else {
 
             rolledInRound[currentRound][mapRollInRoundToArray(isFirstRollInRound)] = pins;
@@ -35,20 +35,22 @@ public class BowlingGame {
     public int calculateScore() {
         int finalScore = 0;
 
-        for (int i = 0; i < rounds; i++){
+        for (int i = 0; i < ROUNDS; i++){
              System.out.println("Rolled in round " + i + " in first roll is "
                      + rolledInRound[i][0] + " and in second roll " +  rolledInRound[i][1]);
 
              finalScore += rolledInRound[i][0] + rolledInRound[i][1];
 
-             if (checkIfSpare(i))
+             if (isSpare(i))
                  finalScore += rolledInRound[i+1][0];
 
-             if (checkIfStrike(i) && checkIfTwoStrikesInRow(i))
+             if (isStrike(i) && isTwoStrikesInTheRow(i))
                  finalScore += rolledInRound[i+1][0] + rolledInRound[i+2][0];
 
-             if (checkIfStrike(i) && !checkIfTwoStrikesInRow(i))
+             if (isStrike(i) && !isTwoStrikesInTheRow(i))
                  finalScore += rolledInRound[i+1][0] + rolledInRound[i+1][1];
+
+             System.out.println("Score in current round: " + finalScore);
         }
 
         return finalScore;
@@ -61,16 +63,16 @@ public class BowlingGame {
             return 1;
     }
 
-    private boolean checkIfSpare(int round){
+    private boolean isSpare(int round){
         return ((rolledInRound[round][0] + rolledInRound[round][1] == 10) && rolledInRound[round][0] != 10);
     }
 
-    private boolean checkIfStrike(int round){
+    private boolean isStrike(int round){
         return (rolledInRound[round][0] == 10 && rolledInRound[round][1] == 0);
     }
 
-    private boolean checkIfTwoStrikesInRow(int round){
-        return (checkIfStrike(round) && checkIfStrike(round+1));
+    private boolean isTwoStrikesInTheRow(int round){
+        return (isStrike(round) && isStrike(round+1));
     }
 
 }
