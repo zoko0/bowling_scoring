@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 public class BowlingGameTest {
 
     private BowlingGame game;
+    int[] rollQueue;
 
     @Before
     public void setUp(){
@@ -31,18 +32,23 @@ public class BowlingGameTest {
 
     @Test
     public void bowlingGameScoreAfterTwoRolls() throws Exception {
-        game.roll(5);
-        game.roll(4);
+        rollQueue = new int[]{5, 4};
+        theySeeMeRollinTheyHatin(rollQueue);
         assertEquals(9, game.calculateScore());
     }
 
     @Test
     public void bowlingGameScoreAfterFiveRolls() throws Exception {
-        game.roll(5);
-        game.roll(4);
-        game.roll(4);
-        game.roll(4);
-        game.roll(4);
+        rollQueue = new int[]{5, 4, 4, 4, 4};
+        theySeeMeRollinTheyHatin(rollQueue);
         assertEquals(21, game.calculateScore());
     }
+
+    private void theySeeMeRollinTheyHatin(int[] rollQueue) throws Exception {
+        for (int aRollQueue : rollQueue) {
+            game.roll(aRollQueue);
+        }
+    }
+
+
 }

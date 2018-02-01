@@ -2,7 +2,7 @@ public class BowlingGame {
     private static final int rounds = 10;
     private static final int maxPins = 10;
     private int[][] rolledInRound;
-    private int currentRound= 0;
+    private int currentRound= -1;
     private boolean isFirstRollInRound = true;
 
     //konstruktor
@@ -25,13 +25,13 @@ public class BowlingGame {
         else {
             if (isFirstRollInRound){
                 //checkIfStrike
-
-                //this.rolledInRound[currentRound][1] = 0;
+                currentRound++;
             } else{
                 //checkIfSpare
-
             }
-            rolledInRound[currentRound++][mapRollInRoundToArray(isFirstRollInRound)] = pins;
+            rolledInRound[currentRound][mapRollInRoundToArray(isFirstRollInRound)] = pins;
+            isFirstRollInRound = !(isFirstRollInRound);
+
         }
     }
 
