@@ -1,5 +1,5 @@
 public class BowlingGame {
-    private static final int rounds = 10;
+    private static final int rounds = 11; // 10 + ekstra rzut
     private static final int maxPins = 10;
     private int[][] rolledInRound;
     private int currentRound= 0;
@@ -7,13 +7,14 @@ public class BowlingGame {
 
     //konstruktor
     public BowlingGame(){
-        this.rolledInRound = new int[rounds][2];
+        this.rolledInRound = new int[rounds][3];
     }
 
     public void roll(int pins) throws Exception {
         if (pins > maxPins)
             throw new Exception("Too large number of knocked pins");
         else {
+
             rolledInRound[currentRound][mapRollInRoundToArray(isFirstRollInRound)] = pins;
 
             //jeśli strike to zapisz w drugim rzucie kolejki -1 i ustaw "drugi rzut"  rzucony
@@ -35,8 +36,8 @@ public class BowlingGame {
         int finalScore = 0;
 
         for (int i = 0; i < rounds; i++){
-             System.out.println("Rolled in round " + i + " in firts roll is "
-                     + rolledInRound[i][0] + " and " +  rolledInRound[i][1]);
+             System.out.println("Rolled in round " + i + " in first roll is "
+                     + rolledInRound[i][0] + " and in second roll " +  rolledInRound[i][1]);
 
              finalScore += rolledInRound[i][0] + rolledInRound[i][1];
 
